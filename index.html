@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lácteos de Cabra Corcovado | Catálogo Digital</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-emerald-800 text-white shadow-md sticky top-0 z-40">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-emerald-800 font-bold text-xl shadow">
+                    🐐
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">Lácteos de Cabra Corcovado</h1>
+                    <p class="text-xs text-emerald-200"><i class="fa-solid fa-phone"></i> +57 312 2068690</p>
+                </div>
+            </div>
+            <button onclick="toggleCart()" class="relative bg-emerald-700 hover:bg-emerald-600 px-4 py-2 rounded-full font-medium text-sm flex items-center space-x-2 transition shadow">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span id="cart-count" class="bg-amber-400 text-emerald-950 font-bold px-2 py-0.5 rounded-full text-xs">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-6 flex-grow w-full">
+        
+        <!-- Search & Filters -->
+        <div class="mb-6 space-y-3">
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400"></i>
+                <input type="text" id="search-input" oninput="filterProducts()" placeholder="Buscar quesos, yogures, leche..." class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 text-sm">
+            </div>
+            <div class="flex space-x-2 overflow-x-auto pb-2 scrollbar-none">
+                <button onclick="filterCategory('all')" id="btn-all" class="cat-btn px-4 py-2 bg-emerald-800 text-white rounded-full text-xs font-semibold whitespace-nowrap shadow-sm">Todos</button>
+                <button onclick="filterCategory('quesos')" id="btn-quesos" class="cat-btn px-4 py-2 bg-white text-slate-600 border border-slate-200 rounded-2xl text-xs font-semibold whitespace-nowrap">Quesos Especiales</button>
+                <button onclick="filterCategory('yogurt')" id="btn-yogurt" class="cat-btn px-4 py-2 bg-white text-slate-600 border border-slate-200 rounded-2xl text-xs font-semibold whitespace-nowrap">Yogur Gourmet</button>
+                <button onclick="filterCategory('leche')" id="btn-leche" class="cat-btn px-4 py-2 bg-white text-slate-600 border border-slate-200 rounded-2xl text-xs font-semibold whitespace-nowrap">Leche</button>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <!-- Los productos se cargan dinámicamente -->
+        </div>
+    </main>
+
+    <!-- Floating Cart Drawer / Modal -->
+    <div id="cart-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex justify-end">
+        <div class="bg-white w-full max-w-md h-full flex flex-col shadow-xl transform transition-transform">
+            <div class="p-4 bg-emerald-800 text-white flex justify-between items-center">
+                <h2 class="font-bold text-lg"><i class="fa-solid fa-cart-shopping mr-2"></i> Tu Pedido</h2>
+                <button onclick="toggleCart()" class="text-white hover:text-slate-200"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            
+            <div id="cart-items" class="p-4 flex-grow overflow-y-auto space-y-4 divide-y divide-slate-100">
+                <!-- Items del carrito -->
+            </div>
+
+            <div class="p-4 bg-slate-50 border-t border-slate-200 space-y-3">
+                <div class="flex justify-between font-bold text-base">
+                    <span>Total estimado:</span>
+                    <span id="cart-total" class="text-emerald-700">$0 COP</span>
+                </div>
+                <button onclick="checkoutWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold flex items-center justify-center space-x-2 shadow-lg transition">
+                    <i class="fa-brands fa-whatsapp text-xl"></i>
+                    <span>Enviar pedido por WhatsApp</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 mt-12">
+        <p>Derechos de autor reservados &copy; 2026 <strong>Vibras Positivas HM</strong></p>
+        <p class="mt-1">Lácteos de Cabra Corcovado - Calidad 100% Natural</p>
+    </footer>
+
+    <script>
+        const products = [
+            { id: 1, name: "Queso de Cabra con Albahaca", category: "quesos", price: 25000, desc: "Fresco, graso, semiblando (300g)", badge: "Albahaca" },
+            { id: 2, name: "Queso de Cabra Rollo con Ajonjolí", category: "quesos", price: 26000, desc: "Queso blando para untar", badge: "Ajonjolí" },
+            { id: 3, name: "Queso de Cabra Envinado", category: "quesos", price: 28000, desc: "Madurado, graso, duro (250g)", badge: "Envinado" },
+            { id: 4, name: "Queso de Cabra Ahumado", category: "quesos", price: 27000, desc: "Madurado, graso, duro (250g)", badge: "Ahumado" },
+            { id: 5, name: "Queso de Cabra Amarelo", category: "quesos", price: 27000, desc: "Madurado, graso, duro (250g)", badge: "Amarelo" },
+            { id: 6, name: "Queso de Cabra Natural", category: "quesos", price: 24000, desc: "Fresco, graso, semiblando (300g)", badge: "Natural" },
+            { id: 7, name: "Queso Feta de Cabra", category: "quesos", price: 25000, desc: "Bloque empacado al vacío", badge: "Feta" },
+            { id: 8, name: "Queso Blando para Untar", category: "quesos", price: 22000, desc: "Presentación en tarrina", badge: "Blando" },
+            { id: 9, name: "Yogurt Gourmet - Guanábana", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Guanábana" },
+            { id: 10, name: "Yogurt Gourmet - Fresa", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Fresa" },
+            { id: 11, name: "Yogurt Gourmet - Mora", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Mora" },
+            { id: 12, name: "Yogurt Gourmet - Piña", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Piña" },
+            { id: 13, name: "Yogurt Gourmet - Guayaba", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Guayaba" },
+            { id: 14, name: "Yogurt Gourmet - Café", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Café" },
+            { id: 15, name: "Yogurt Gourmet - Natural", category: "yogurt", price: 7500, desc: "Tipo europeo, prebióticos (250cc)", badge: "Natural" },
+            { id: 16, name: "Leche Entera de Cabra", category: "leche", price: 9000, desc: "Alimento completo alto valor biológico (1000 C.C.)", badge: "1 Litro" }
+        ];
+
+        let cart = {};
+        let currentCat = 'all';
+
+        function renderProducts(items) {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = items.map(p => `
+                <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-100 flex flex-col justify-between">
+                    <div>
+                        <div class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full inline-block mb-2">${p.badge}</div>
+                        <h3 class="font-bold text-sm text-slate-800 leading-snug mb-1">${p.name}</h3>
+                        <p class="text-xs text-slate-400 mb-3">${p.desc}</p>
+                    </div>
+                    <div>
+                        <div class="text-emerald-700 font-extrabold text-sm mb-2">$${p.price.toLocaleString()} COP</div>
+                        <button onclick="addToCart(${p.id})" class="w-full bg-emerald-800 hover:bg-emerald-700 text-white py-2 rounded-xl text-xs font-semibold transition flex items-center justify-center space-x-1">
+                            <i class="fa-solid fa-plus"></i> <span>Agregar</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterCategory(cat) {
+            currentCat = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = "cat-btn px-4 py-2 bg-white text-slate-600 border border-slate-200 rounded-2xl text-xs font-semibold whitespace-nowrap";
+            });
+            if(cat === 'all') document.getElementById('btn-all').className = "cat-btn px-4 py-2 bg-emerald-800 text-white rounded-full text-xs font-semibold whitespace-nowrap shadow-sm";
+            if(cat === 'quesos') document.getElementById('btn-quesos').className = "cat-btn px-4 py-2 bg-emerald-800 text-white rounded-full text-xs font-semibold whitespace-nowrap shadow-sm";
+            if(cat === 'yogurt') document.getElementById('btn-yogurt').className = "cat-btn px-4 py-2 bg-emerald-800 text-white rounded-full text-xs font-semibold whitespace-nowrap shadow-sm";
+            if(cat === 'leche') document.getElementById('btn-leche').className = "cat-btn px-4 py-2 bg-emerald-800 text-white rounded-full text-xs font-semibold whitespace-nowrap shadow-sm";
+
+            filterProducts();
+        }
+
+        function filterProducts() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = products.filter(p => {
+                const matchCat = currentCat === 'all' || p.category === currentCat;
+                const matchQuery = p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query);
+                return matchCat && matchQuery;
+            });
+            renderProducts(filtered);
+        }
+
+        function addToCart(id) {
+            cart[id] = (cart[id] || 0) + 1;
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            let totalCount = 0;
+            let totalPrice = 0;
+            let container = document.getElementById('cart-items');
+            container.innerHTML = '';
+
+            for (let id in cart) {
+                if (cart[id] > 0) {
+                    let p = products.find(item => item.id == id);
+                    totalCount += cart[id];
+                    totalPrice += p.price * cart[id];
+
+                    container.innerHTML += `
+                        <div class="py-2 flex justify-between items-center text-sm">
+                            <div>
+                                <h4 class="font-semibold text-slate-800 text-xs">${p.name}</h4>
+                                <span class="text-xs text-emerald-700 font-bold">$${p.price.toLocaleString()} x ${cart[id]}</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="changeQty(${id}, -1)" class="w-6 h-6 bg-slate-100 rounded-full font-bold text-xs">-</button>
+                                <span class="text-xs font-bold">${cart[id]}</span>
+                                <button onclick="changeQty(${id}, 1)" class="w-6 h-6 bg-slate-100 rounded-full font-bold text-xs">+</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            if(totalCount === 0) {
+                container.innerHTML = '<p class="text-center text-slate-400 py-8 text-xs">Tu carrito está vacío</p>';
+            }
+
+            document.getElementById('cart-count').innerText = totalCount;
+            document.getElementById('cart-total').innerText = '$' + totalPrice.toLocaleString() + ' COP';
+        }
+
+        function changeQty(id, delta) {
+            cart[id] = (cart[id] || 0) + delta;
+            if(cart[id] <= 0) delete cart[id];
+            updateCartUI();
+        }
+
+        function toggleCart() {
+            const modal = document.getElementById('cart-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        function checkoutWhatsApp() {
+            let text = "¡Hola! Quisiera realizar el siguiente pedido en *Lácteos de Cabra Corcovado*:\n\n";
+            let total = 0;
+            for(let id in cart) {
+                if(cart[id] > 0) {
+                    let p = products.find(item => item.id == id);
+                    text += `- ${cart[id]}x ${p.name} ($${(p.price * cart[id]).toLocaleString()} COP)\n`;
+                    total += p.price * cart[id];
+                }
+            }
+            if(total === 0) {
+                alert("Agrega al menos un producto al carrito.");
+                return;
+            }
+            text += `\n*Total a pagar: $${total.toLocaleString()} COP*`;
+            text += `\n\nQuedo atento a la confirmación y datos de entrega. ¡Gracias!`;
+
+            const encoded = encodeURIComponent(text);
+            window.open(`https://wa.me/573122068690?text=${encoded}`, '_blank');
+        }
+
+        // Inicializar catálogo
+        renderProducts(products);
+    </script>
+</body>
+</html>
