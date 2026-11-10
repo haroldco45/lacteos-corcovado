@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lácteos de Cabra Corcovado | Catálogo Digital</title>
     
-    <!-- PWA Manifest dinámico -->
+    <!-- PWA Manifest -->
     <link rel="manifest" href="data:application/manifest+json;charset=utf-8,{
         %22name%22: %22Lácteos de Cabra Corcovado%22,
         %22short_name%22: %22Corcovado%22,
@@ -19,7 +19,7 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- FontAwesome para iconos -->
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
@@ -70,7 +70,7 @@
         </div>
     </main>
 
-    <!-- Floating Cart Drawer / Modal -->
+    <!-- Floating Cart Drawer -->
     <div id="cart-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex justify-end">
         <div class="bg-white w-full max-w-md h-full flex flex-col shadow-xl transform transition-transform">
             <div class="p-4 bg-emerald-800 text-white flex justify-between items-center">
@@ -79,7 +79,7 @@
             </div>
             
             <div id="cart-items" class="p-4 flex-grow overflow-y-auto space-y-4 divide-y divide-slate-100">
-                <!-- Items del carrito -->
+                <!-- Items -->
             </div>
 
             <div class="p-4 bg-slate-50 border-t border-slate-200 space-y-3">
@@ -102,7 +102,7 @@
     </footer>
 
     <script>
-        // Registro del Service Worker (PWA)
+        // Service Worker PWA
         if ('serviceWorker' in navigator) {
             const swCode = `
                 self.addEventListener('install', e => { self.skipWaiting(); });
@@ -111,27 +111,26 @@
                     e.respondWith(caches.match(e.request).then(cached => cached || fetch(e.request)));
                 });
             `;
-            const swBlob = new Blob([swCode], { type: 'text/javascript' });
-            navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(err => console.error(err));
+            navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode], { type: 'text/javascript' }))).catch(err => console.error(err));
         }
 
         const products = [
-            { id: 1, name: "Queso de Cabra con Albahaca", category: "quesos", price: 25000, desc: "Fresco, graso, semiblando (300g)", badge: "Albahaca", image: "https://images.weserv.nl/?url=i.ibb.co/3ykJ8Z2/1003255623.jpg" },
-            { id: 2, name: "Queso de Cabra Rollo con Ajonjolí", category: "quesos", price: 26000, desc: "Queso blando para untar", badge: "Ajonjolí", image: "https://images.weserv.nl/?url=i.ibb.co/7X82V6f/1003255619.jpg" },
-            { id: 3, name: "Queso de Cabra Envinado", category: "quesos", price: 28000, desc: "Madurado, graso, duro (250g)", badge: "Envinado", image: "https://images.weserv.nl/?url=i.ibb.co/2k1Wz5C/1003255613.jpg" },
-            { id: 4, name: "Queso de Cabra Ahumado", category: "quesos", price: 27000, desc: "Madurado, graso, duro (250g)", badge: "Ahumado", image: "https://images.weserv.nl/?url=i.ibb.co/6R22v4K/1003255615.jpg" },
-            { id: 5, name: "Queso de Cabra Amarelo", category: "quesos", price: 27000, desc: "Madurado, graso, duro (250g)", badge: "Amarelo", image: "https://images.weserv.nl/?url=i.ibb.co/8m6212K/1003255617.jpg" },
-            { id: 6, name: "Queso de Cabra Natural", category: "quesos", price: 24000, desc: "Fresco, graso, semiblando (300g)", badge: "Natural", image: "https://images.weserv.nl/?url=i.ibb.co/3w51q8x/1003255607.jpg" },
-            { id: 7, name: "Queso Feta de Cabra", category: "quesos", price: 25000, desc: "Bloque empacado al vacío", badge: "Feta", image: "https://images.weserv.nl/?url=i.ibb.co/9v0Z828/1003255609.jpg" },
-            { id: 8, name: "Queso Blando para Untar", category: "quesos", price: 22000, desc: "Presentación en tarrina", badge: "Blando", image: "https://images.weserv.nl/?url=i.ibb.co/5w8991X/1003255611.jpg" },
-            { id: 9, name: "Yogurt Gourmet - Guanábana", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Guanábana", image: "https://images.weserv.nl/?url=i.ibb.co/2k97x85/1003255596.jpg" },
-            { id: 10, name: "Yogurt Gourmet - Fresa", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Fresa", image: "https://images.weserv.nl/?url=i.ibb.co/7j5592h/1003255588.jpg" },
-            { id: 11, name: "Yogurt Gourmet - Mora", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Mora", image: "https://images.weserv.nl/?url=i.ibb.co/5x06314/1003255594.jpg" },
-            { id: 12, name: "Yogurt Gourmet - Piña", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Piña", image: "https://images.weserv.nl/?url=i.ibb.co/808112F/1003255592.jpg" },
-            { id: 13, name: "Yogurt Gourmet - Guayaba", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Guayaba", image: "https://images.weserv.nl/?url=i.ibb.co/3m62V1D/1003255587.jpg" },
-            { id: 14, name: "Yogurt Gourmet - Café", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Café", image: "https://images.weserv.nl/?url=i.ibb.co/9g5582K/1003255590.jpg" },
-            { id: 15, name: "Yogurt Gourmet - Natural", category: "yogurt", price: 7500, desc: "Tipo europeo, prebióticos (250cc)", badge: "Natural", image: "https://images.weserv.nl/?url=i.ibb.co/1z1z829/1003255598.jpg" },
-            { id: 16, name: "Leche Entera de Cabra", category: "leche", price: 9000, desc: "Alimento completo alto valor biológico (1000 C.C.)[span_1](start_span)[span_1](end_span)", badge: "1 Litro", image: "https://images.weserv.nl/?url=i.ibb.co/5G82v4K/1003255581.jpg" }
+            { id: 1, name: "Queso de Cabra con Albahaca", category: "quesos", price: 25000, desc: "Fresco, graso, semiblando (300g)", badge: "Albahaca", image: "https://images.weserv.nl/?url=raw.githubusercontent.com/haroldco45/haroldco45.github.io/main/img1.jpg" },
+            { id: 2, name: "Queso de Cabra Rollo con Ajonjolí", category: "quesos", price: 26000, desc: "Queso blando para untar", badge: "Ajonjolí", image: "https://images.weserv.nl/?url=raw.githubusercontent.com/haroldco45/haroldco45.github.io/main/img2.jpg" },
+            { id: 3, name: "Queso de Cabra Envinado", category: "quesos", price: 28000, desc: "Madurado, graso, duro (250g)", badge: "Envinado", image: "https://images.weserv.nl/?url=raw.githubusercontent.com/haroldco45/haroldco45.github.io/main/img3.jpg" },
+            { id: 4, name: "Queso de Cabra Ahumado", category: "quesos", price: 27000, desc: "Madurado, graso, duro (250g)", badge: "Ahumado", image: "https://images.weserv.nl/?url=raw.githubusercontent.com/haroldco45/haroldco45.github.io/main/img4.jpg" },
+            { id: 5, name: "Queso de Cabra Amarelo", category: "quesos", price: 27000, desc: "Madurado, graso, duro (250g)", badge: "Amarelo", image: "https://images.weserv.nl/?url=raw.githubusercontent.com/haroldco45/haroldco45.github.io/main/img5.jpg" },
+            { id: 6, name: "Queso de Cabra Natural", category: "quesos", price: 24000, desc: "Fresco, graso, semiblando (300g)", badge: "Natural", image: "https://images.weserv.nl/?url=raw.githubusercontent.com/haroldco45/haroldco45.github.io/main/img6.jpg" },
+            { id: 7, name: "Queso Feta de Cabra", category: "quesos", price: 25000, desc: "Bloque empacado al vacío", badge: "Feta", image: "https://images.weserv.nl/?url=raw.githubusercontent.com/haroldco45/haroldco45.github.io/main/img7.jpg" },
+            { id: 8, name: "Queso Blando para Untar", category: "quesos", price: 22000, desc: "Presentación en tarrina", badge: "Blando", image: "https://images.weserv.nl/?url=raw.githubusercontent.com/haroldco45/haroldco45.github.io/main/img8.jpg" },
+            { id: 9, name: "Yogurt Gourmet - Guanábana", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Guanábana", image: "https://images.weserv.nl/?url=raw.githubusercontent.com/haroldco45/haroldco45.github.io/main/img9.jpg" },
+            { id: 10, name: "Yogurt Gourmet - Fresa", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Fresa", image: "https://images.weserv.nl/?url=raw.githubusercontent.com/haroldco45/haroldco45.github.io/main/img10.jpg" },
+            { id: 11, name: "Yogurt Gourmet - Mora", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Mora", image: "https://images.weserv.nl/?url=raw.githubusercontent.com/haroldco45/haroldco45.github.io/main/img11.jpg" },
+            { id: 12, name: "Yogurt Gourmet - Piña", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Piña", image: "https://images.weserv.nl/?url=raw.githubusercontent.com/haroldco45/haroldco45.github.io/main/img12.jpg" },
+            { id: 13, name: "Yogurt Gourmet - Guayaba", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Guayaba", image: "https://images.weserv.nl/?url=raw.githubusercontent.com/haroldco45/haroldco45.github.io/main/img13.jpg" },
+            { id: 14, name: "Yogurt Gourmet - Café", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Café", image: "https://images.weserv.nl/?url=raw.githubusercontent.com/haroldco45/haroldco45.github.io/main/img14.jpg" },
+            { id: 15, name: "Yogurt Gourmet - Natural", category: "yogurt", price: 7500, desc: "Tipo europeo, prebióticos (250cc)", badge: "Natural", image: "https://images.weserv.nl/?url=raw.githubusercontent.com/haroldco45/haroldco45.github.io/main/img15.jpg" },
+            { id: 16, name: "Leche Entera de Cabra", category: "leche", price: 9000, desc: "Alimento completo alto valor biológico (1000 C.C.)[span_1](start_span)[span_1](end_span)", badge: "1 Litro", image: "https://images.weserv.nl/?url=raw.githubusercontent.com/haroldco45/haroldco45.github.io/main/img16.jpg" }
         ];
 
         let cart = {};
@@ -142,8 +141,8 @@
             grid.innerHTML = items.map(p => `
                 <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-100 flex flex-col justify-between">
                     <div>
-                        <div class="w-full h-36 bg-slate-100 rounded-xl mb-3 overflow-hidden flex items-center justify-center">
-                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover">
+                        <div class="w-full h-36 bg-slate-100 rounded-xl mb-3 overflow-hidden flex items-center justify-center relative">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27100%27 height=%27100%27><text x=%2750%%27 y=%2750%%27 dominant-baseline=%27middle%27 text-anchor=%27middle%27 font-size=%2740%27>🐐</text></svg>';">
                         </div>
                         <div class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full inline-block mb-1">${p.badge}</div>
                         <h3 class="font-bold text-sm text-slate-800 leading-snug mb-1">${p.name}</h3>
@@ -168,7 +167,6 @@
             if(cat === 'quesos') document.getElementById('btn-quesos').className = "cat-btn px-4 py-2 bg-emerald-800 text-white rounded-full text-xs font-semibold whitespace-nowrap shadow-sm";
             if(cat === 'yogurt') document.getElementById('btn-yogurt').className = "cat-btn px-4 py-2 bg-emerald-800 text-white rounded-full text-xs font-semibold whitespace-nowrap shadow-sm";
             if(cat === 'leche') document.getElementById('btn-leche').className = "cat-btn px-4 py-2 bg-emerald-800 text-white rounded-full text-xs font-semibold whitespace-nowrap shadow-sm";
-
             filterProducts();
         }
 
@@ -230,8 +228,7 @@
         }
 
         function toggleCart() {
-            const modal = document.getElementById('cart-modal');
-            modal.classList.toggle('hidden');
+            document.getElementById('cart-modal').classList.toggle('hidden');
         }
 
         function checkoutWhatsApp() {
@@ -251,11 +248,9 @@
             text += `\n*Total a pagar: $${total.toLocaleString()} COP*`;
             text += `\n\nQuedo atento a la confirmación y datos de entrega. ¡Gracias!`;
 
-            const encoded = encodeURIComponent(text);
-            window.open(`https://wa.me/573122068690?text=${encoded}`, '_blank');[span_2](start_span)[span_2](end_span)
+            window.open(`https://wa.me/573122068690?text=${encodeURIComponent(text)}`, '_blank');[span_2](start_span)[span_2](end_span)
         }
 
-        // Inicializar catálogo
         renderProducts(products);
     </script>
 </body>
