@@ -105,42 +105,33 @@
         // Registro del Service Worker (PWA)
         if ('serviceWorker' in navigator) {
             const swCode = `
-                self.addEventListener('install', e => {
-                    self.skipWaiting();
-                });
-                self.addEventListener('activate', e => {
-                    e.waitUntil(clients.claim());
-                });
+                self.addEventListener('install', e => { self.skipWaiting(); });
+                self.addEventListener('activate', e => { e.waitUntil(clients.claim()); });
                 self.addEventListener('fetch', e => {
-                    e.respondWith(
-                        caches.match(e.request).then(cached => cached || fetch(e.request))
-                    );
+                    e.respondWith(caches.match(e.request).then(cached => cached || fetch(e.request)));
                 });
             `;
             const swBlob = new Blob([swCode], { type: 'text/javascript' });
-            const swUrl = URL.createObjectURL(swBlob);
-            navigator.serviceWorker.register(swUrl)
-                .then(() => console.log("Service Worker registrado con éxito."))
-                .catch(err => console.error("Error al registrar Service Worker:", err));
+            navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(err => console.error(err));
         }
 
         const products = [
-            { id: 1, name: "Queso de Cabra con Albahaca", category: "quesos", price: 25000, desc: "Fresco, graso, semiblando (300g)", badge: "Albahaca", icon: "🌿" },
-            { id: 2, name: "Queso de Cabra Rollo con Ajonjolí", category: "quesos", price: 26000, desc: "Queso blando para untar", badge: "Ajonjolí", icon: "🥖" },
-            { id: 3, name: "Queso de Cabra Envinado", category: "quesos", price: 28000, desc: "Madurado, graso, duro (250g)", badge: "Envinado", icon: "🍇" },
-            { id: 4, name: "Queso de Cabra Ahumado", category: "quesos", price: 27000, desc: "Madurado, graso, duro (250g)", badge: "Ahumado", icon: "🔥" },
-            { id: 5, name: "Queso de Cabra Amarelo", category: "quesos", price: 27000, desc: "Madurado, graso, duro (250g)", badge: "Amarelo", icon: "🧀" },
-            { id: 6, name: "Queso de Cabra Natural", category: "quesos", price: 24000, desc: "Fresco, graso, semiblando (300g)", badge: "Natural", icon: "🥛" },
-            { id: 7, name: "Queso Feta de Cabra", category: "quesos", price: 25000, desc: "Bloque empacado al vacío", badge: "Feta", icon: "📦" },
-            { id: 8, name: "Queso Blando para Untar", category: "quesos", price: 22000, desc: "Presentación en tarrina", badge: "Blando", icon: "🥣" },
-            { id: 9, name: "Yogurt Gourmet - Guanábana", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Guanábana", icon: "🍈" },
-            { id: 10, name: "Yogurt Gourmet - Fresa", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Fresa", icon: "🍓" },
-            { id: 11, name: "Yogurt Gourmet - Mora", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Mora", icon: "🫐" },
-            { id: 12, name: "Yogurt Gourmet - Piña", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Piña", icon: "🍍" },
-            { id: 13, name: "Yogurt Gourmet - Guayaba", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Guayaba", icon: "🍃" },
-            { id: 14, name: "Yogurt Gourmet - Café", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Café", icon: "☕" },
-            { id: 15, name: "Yogurt Gourmet - Natural", category: "yogurt", price: 7500, desc: "Tipo europeo, prebióticos (250cc)", badge: "Natural", icon: "🥛" },
-            { id: 16, name: "Leche Entera de Cabra", category: "leche", price: 9000, desc: "Alimento completo alto valor biológico (1000 C.C.)", badge: "1 Litro", icon: "🍼" }
+            { id: 1, name: "Queso de Cabra con Albahaca", category: "quesos", price: 25000, desc: "Fresco, graso, semiblando (300g)", badge: "Albahaca", image: "https://images.weserv.nl/?url=i.ibb.co/3ykJ8Z2/1003255623.jpg" },
+            { id: 2, name: "Queso de Cabra Rollo con Ajonjolí", category: "quesos", price: 26000, desc: "Queso blando para untar", badge: "Ajonjolí", image: "https://images.weserv.nl/?url=i.ibb.co/7X82V6f/1003255619.jpg" },
+            { id: 3, name: "Queso de Cabra Envinado", category: "quesos", price: 28000, desc: "Madurado, graso, duro (250g)", badge: "Envinado", image: "https://images.weserv.nl/?url=i.ibb.co/2k1Wz5C/1003255613.jpg" },
+            { id: 4, name: "Queso de Cabra Ahumado", category: "quesos", price: 27000, desc: "Madurado, graso, duro (250g)", badge: "Ahumado", image: "https://images.weserv.nl/?url=i.ibb.co/6R22v4K/1003255615.jpg" },
+            { id: 5, name: "Queso de Cabra Amarelo", category: "quesos", price: 27000, desc: "Madurado, graso, duro (250g)", badge: "Amarelo", image: "https://images.weserv.nl/?url=i.ibb.co/8m6212K/1003255617.jpg" },
+            { id: 6, name: "Queso de Cabra Natural", category: "quesos", price: 24000, desc: "Fresco, graso, semiblando (300g)", badge: "Natural", image: "https://images.weserv.nl/?url=i.ibb.co/3w51q8x/1003255607.jpg" },
+            { id: 7, name: "Queso Feta de Cabra", category: "quesos", price: 25000, desc: "Bloque empacado al vacío", badge: "Feta", image: "https://images.weserv.nl/?url=i.ibb.co/9v0Z828/1003255609.jpg" },
+            { id: 8, name: "Queso Blando para Untar", category: "quesos", price: 22000, desc: "Presentación en tarrina", badge: "Blando", image: "https://images.weserv.nl/?url=i.ibb.co/5w8991X/1003255611.jpg" },
+            { id: 9, name: "Yogurt Gourmet - Guanábana", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Guanábana", image: "https://images.weserv.nl/?url=i.ibb.co/2k97x85/1003255596.jpg" },
+            { id: 10, name: "Yogurt Gourmet - Fresa", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Fresa", image: "https://images.weserv.nl/?url=i.ibb.co/7j5592h/1003255588.jpg" },
+            { id: 11, name: "Yogurt Gourmet - Mora", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Mora", image: "https://images.weserv.nl/?url=i.ibb.co/5x06314/1003255594.jpg" },
+            { id: 12, name: "Yogurt Gourmet - Piña", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Piña", image: "https://images.weserv.nl/?url=i.ibb.co/808112F/1003255592.jpg" },
+            { id: 13, name: "Yogurt Gourmet - Guayaba", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Guayaba", image: "https://images.weserv.nl/?url=i.ibb.co/3m62V1D/1003255587.jpg" },
+            { id: 14, name: "Yogurt Gourmet - Café", category: "yogurt", price: 8000, desc: "Tipo europeo, prebióticos (250cc)", badge: "Café", image: "https://images.weserv.nl/?url=i.ibb.co/9g5582K/1003255590.jpg" },
+            { id: 15, name: "Yogurt Gourmet - Natural", category: "yogurt", price: 7500, desc: "Tipo europeo, prebióticos (250cc)", badge: "Natural", image: "https://images.weserv.nl/?url=i.ibb.co/1z1z829/1003255598.jpg" },
+            { id: 16, name: "Leche Entera de Cabra", category: "leche", price: 9000, desc: "Alimento completo alto valor biológico (1000 C.C.)[span_1](start_span)[span_1](end_span)", badge: "1 Litro", image: "https://images.weserv.nl/?url=i.ibb.co/5G82v4K/1003255581.jpg" }
         ];
 
         let cart = {};
@@ -151,8 +142,8 @@
             grid.innerHTML = items.map(p => `
                 <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-100 flex flex-col justify-between">
                     <div>
-                        <div class="w-full h-28 bg-emerald-50 rounded-xl mb-3 flex items-center justify-center text-4xl shadow-inner">
-                            ${p.icon}
+                        <div class="w-full h-36 bg-slate-100 rounded-xl mb-3 overflow-hidden flex items-center justify-center">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover">
                         </div>
                         <div class="bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full inline-block mb-1">${p.badge}</div>
                         <h3 class="font-bold text-sm text-slate-800 leading-snug mb-1">${p.name}</h3>
@@ -261,7 +252,7 @@
             text += `\n\nQuedo atento a la confirmación y datos de entrega. ¡Gracias!`;
 
             const encoded = encodeURIComponent(text);
-            window.open(`https://wa.me/573122068690?text=${encoded}`, '_blank');[span_1](start_span)[span_1](end_span)
+            window.open(`https://wa.me/573122068690?text=${encoded}`, '_blank');[span_2](start_span)[span_2](end_span)
         }
 
         // Inicializar catálogo
